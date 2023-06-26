@@ -61,7 +61,7 @@ export default function Login() {
                     className="w-1/2 bg-cover md:block hidden"
                     style={{
                         backgroundImage:
-                            "url(https://images.unsplash.com/photo-1619279148778-fbccc09f36b1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80)",
+                            "url(https://scitechdaily.com/images/DNA-Functions-Concept.jpg)",
                     }}
                 />
                 <div className="md:w-1/2 max-w-lg mx-auto my-24 px-4 py-5 shadow-none">
@@ -116,7 +116,7 @@ export default function Login() {
                             />
                         </div>
                     </form>
-                    <Link to="/sginup">
+                    <Link to="/Signup">
                         <span className="block p-5 text-center text-gray-800 text-l">
                             Don't have an account ?{" "}
                             <span className="text-l text-blue-600">Sign Up</span>

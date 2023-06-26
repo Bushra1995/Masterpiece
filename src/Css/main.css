@@ -201,9 +201,16 @@ p {
   position: absolute;
   /* margin-left: 13%; */
 }
-.shape-3 {
+.shape-1 {
   position: absolute;
   margin-left: 160vh;
+  margin-top: 60vh;
+}
+
+.shape-3 {
+  position: absolute;
+  margin-left: 20vh;
+  margin-top: -5vh;
 }
 /* .strain {
   width: 155px;

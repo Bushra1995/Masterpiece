@@ -47,7 +47,7 @@ const Laboratories = () => {
                                         We operate diagnostic medical laboratories in 22 different
                                         location branches throughout the country.
                                     </p>
-                                    <Link to="#" className="read-more">
+                                    <Link to="LabPage" className="read-more text-decoration-none">
                                         Go to the Lab <i className="lni lni-arrow-right" />
                                     </Link>
                                 </div>
@@ -67,11 +67,10 @@ const Laboratories = () => {
                                 <div className="service-content">
                                     <h4>Biolab</h4>
                                     <p>
-                                        Biolab’s mandate is to provide high-quality, cost-effective
-                                        laboratory operation through a consolidated service delivery
-                                        model.
+                                        Biolab’s mandate is to provide high-quality laboratory
+                                        operation by consolidated service delivery model.
                                     </p>
-                                    <Link to="#" className="read-more">
+                                    <Link to="LabPage" className="read-more text-decoration-none">
                                         Go to the Lab <i className="lni lni-arrow-right" />
                                     </Link>
                                 </div>
@@ -90,7 +89,7 @@ const Laboratories = () => {
                                         We operate diagnostic medical laboratories in 22 different
                                         location branches throughout the country.
                                     </p>
-                                    <Link to="#" className="read-more">
+                                    <Link to="LabPage" className="read-more text-decoration-none">
                                         Go to the Lab <i className="lni lni-arrow-right" />
                                     </Link>
                                 </div>

@@ -44,7 +44,7 @@ export default function SignUp() {
                 const data = await response.json();
                 // Store the token in localStorage
                 localStorage.setItem("token", data.token);
-                navigate("/DonarProfile");
+                navigate("/");
 
                 // Handle the response data as needed
                 console.log(data);
@@ -79,7 +79,7 @@ export default function SignUp() {
                     className="w-1/2 bg-cover md:block hidden"
                     style={{
                         backgroundImage:
-                            "url(https://images.unsplash.com/photo-1619279302118-43033660826a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80)",
+                            "url(https://scitechdaily.com/images/DNA-Functions-Concept.jpg)",
                     }}
                 />
                 <div className="md:w-1/2 max-w-lg mx-auto my-24 px-4 py-5 shadow-none">
@@ -178,7 +178,7 @@ export default function SignUp() {
                             />
                         </div>
                     </form>
-                    <Link to="/login">
+                    <Link to="/SignIn">
                         <span className="block  p-5 text-center text-gray-800  text-l ">
                             Already have an account ?
                             <span className="text-l text-blue-600 "> Login</span>

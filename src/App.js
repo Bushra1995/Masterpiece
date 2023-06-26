@@ -12,6 +12,8 @@ import HouseCallService from "../src/pages/HouseCallService";
 import LaboratoryProfile from './pages/LaboratoryProfile';
 import TestCards from './pages/TestCards';
 import Checkout from './pages/Checkout';
+import LabPage from './pages/LabPage';
+import ContactUs from './pages/ContactUs';
 
 
 function App() {
@@ -21,7 +23,7 @@ function App() {
     <>
       {/* User */}
       <BrowserRouter>
-
+      
         <SocialNav />
         <Routes>
           <Route path="/" element={<Home />} />
@@ -33,6 +35,8 @@ function App() {
           <Route path="/labProfile" element={<LaboratoryProfile />} />    {/* showed when the lab logged into his account */}
           <Route path="/testCards" element={<TestCards />} />             {/* showed when patient click on a lab from the home page so here he can choose the tests to perform */}
           <Route path="/payment" element={<Checkout />} />                {/* showed when the patient choose a test to perform and if an out patient choose call service */}
+          <Route path="/LabPage" element={<LabPage />} />
+          <Route path="/contact" element={<ContactUs />} />
           <Route path="/SignIn" element={<SignIn />} />
           <Route path="/Signup" element={<Signup />} />
 

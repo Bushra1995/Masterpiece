@@ -1,14 +1,14 @@
 import React from 'react'
 import svg3 from '../img/shapes/shape-3.svg';
+import { Link } from "react-router-dom";
 import megaLab from '../img/service/megaLab.png';
 import bioLab from '../img/service/biolab.png';
-import { Link } from "react-router-dom";
 
 const TestCards = () => {
     return (
         <>
 
-            <div className="relative w-full overflow-hidden">
+            {/* <div className="relative w-full overflow-hidden">
                 <div className="min-h-screen flex dark:from-gray-900 bg-gradient-to-b from-white to-blue-50">
                     <div className="container m-auto px-6 py-20 md:pb-0 md:pt-40 md:px-12 lg:py-0 lg:px-10">
                         <div className="flex flex-wrap gap-12">
@@ -26,12 +26,10 @@ const TestCards = () => {
                                             type="button"
                                             title="Start buying"
                                             className="w-full py-3 px-6 rounded-xl text-center transition dark:active:bg-blue-900 dark:focus:bg-gray-800 active:bg-blue-200 focus:bg-blue-100 sm:w-max flex items-center justify-center gap-2"
-                                        // onClick={scrollToPrograms}
                                         >
                                             <span className="block text-blue-700 dark:text-blue-400 font-semibold">
                                                 Browse Our Programs
                                             </span>
-                                            {/* <FaArrowDown className="text-blue-700 dark:text-blue-400" /> */}
                                         </button>
                                     </div>
                                 </div>
@@ -46,16 +44,17 @@ const TestCards = () => {
                                     width={1053}
                                     height={772}
                                 />
+
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> */}
 
 
-                {/*------------------------------------------------------------------Test Cards-------------------------------------------------------------*/}
+            {/*------------------------------------------------------------------Test Cards-------------------------------------------------------------*/}
 
-                <section id="services" className="service-section pt-80 mb-5">
+            <section id="services" className="service-section pt-80 mb-5">
                 <div className=" shape-3">
                     <img src={svg3} alt="" />
                 </div>
@@ -79,16 +78,16 @@ const TestCards = () => {
                             <div className="service-item mb-30">
                                 <div className="service-icon mb-25">
                                     {" "}
-                                    <img className="labimg" src={megaLab} alt="" />
+                                    {/* <img className="labimg" src={megaLab} alt="" /> */}
                                 </div>
                                 <div className="service-content">
-                                    <h4>Mega Lab</h4>
+                                    <h4>Vitamin B 12</h4>
                                     <p>
                                         We operate diagnostic medical laboratories in 22 different
                                         location branches throughout the country.
                                     </p>
-                                    <Link to="#" className="read-more">
-                                        Add Test <i className="lni lni-arrow-right" />
+                                    <Link to="#" className="read-more text-decoration-none">
+                                    More Details <i className="lni lni-arrow-right" />
                                     </Link>
                                 </div>
                                 <div className="service-overlay img-bg" />
@@ -98,21 +97,20 @@ const TestCards = () => {
                             <div className="service-item mb-30">
                                 <div className="service-icon mb-25">
                                     {" "}
-                                    <img
+                                    {/* <img
                                         className="labimg"
                                         src={bioLab}
                                         alt=""
-                                    />
+                                    /> */}
                                 </div>
                                 <div className="service-content">
-                                    <h4>Biolab</h4>
+                                    <h4>Ferritin</h4>
                                     <p>
                                         Biolab’s mandate is to provide high-quality, cost-effective
-                                        laboratory operation through a consolidated service delivery
-                                        model.
+                                        laboratory operation through .
                                     </p>
-                                    <Link to="#" className="read-more">
-                                        Add Test <i className="lni lni-arrow-right" />
+                                    <Link to="#" className="read-more text-decoration-none">
+                                    More Details <i className="lni lni-arrow-right" />
                                     </Link>
                                 </div>
                                 <div className="service-overlay img-bg" />
@@ -122,16 +120,16 @@ const TestCards = () => {
                             <div className="service-item mb-30">
                                 <div className="service-icon mb-25">
                                     {" "}
-                                    <img className="labimg" src={megaLab} alt="" />
+                                    {/* <img className="labimg" src={megaLab} alt="" /> */}
                                 </div>
                                 <div className="service-content">
-                                    <h4>Mega Lab</h4>
+                                    <h4>Vitamin D</h4>
                                     <p>
                                         We operate diagnostic medical laboratories in 22 different
                                         location branches throughout the country.
                                     </p>
-                                    <Link to="#" className="read-more">
-                                        Add Test <i className="lni lni-arrow-right" />
+                                    <Link to="#" className="read-more text-decoration-none">
+                                        More Details <i className="lni lni-arrow-right" />
                                     </Link>
                                 </div>
                                 <div className="service-overlay img-bg" />
