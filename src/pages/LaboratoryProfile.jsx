@@ -10,12 +10,15 @@ import axios from "axios";
 const LaboratoryProfile = () => {
     const [user, setUser] = useState(null);
 
+    // Lab Form Submission Start --------------------------------------------------------------------------------------------------------------------------
     const [labInfoFormData, setLabInfoFormData] = useState({
         labName: '',
         phoneNumber: '',
         location: '',
     });
     console.log(labInfoFormData)
+
+    const [isSubmitted, setIsSubmitted] = useState(false);
 
     const handleLabInfoInputChange = (event) => {
         const { name, value } = event.target;
@@ -37,11 +40,48 @@ const LaboratoryProfile = () => {
                 phoneNumber: '',
                 location: '',
             });
+            setIsSubmitted(true); // Set isSubmitted to true after successful submission
         } catch (error) {
             console.error('Failed to create laboratory:', error);
         }
     };
+    // Lab Form Submission End -------------------------------------------------------------------------------------------------------------------------
 
+    //  Test Form Submission Start ---------------------------------------------------------------------------------------------------------------------
+
+    const [testName, setTestName] = useState("");
+    const [testDescription, setTestDescription] = useState("");
+    const [sampleType, setSampleType] = useState("");
+    const [testRequirements, setTestRequirements] = useState("");
+    const [testTiming, setTestTiming] = useState("");
+    const [testPrice, setTestPrice] = useState("");
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const formData = {
+            testName,
+            testDescription,
+            sampleType,
+            testRequirements,
+            testTiming,
+            testPrice,
+        };
+
+        try {
+            await axios.post("http://localhost:4000/test/tests", formData);
+            console.log(formData)
+            console.log("Data saved successfully!");
+            // Optionally, you can perform additional actions after the data is saved
+        } catch (error) {
+            console.error("Error saving data:", error);
+            // Handle the error appropriately
+        }
+    };
+
+    // Test Form Submission End ----------------------------------------------------------------
+
+    // User Info Fetching Start ------------------------------------------------------------------------------------------------------------------------
     useEffect(() => {
         const fetchUser = async () => {
             try {
@@ -80,6 +120,7 @@ const LaboratoryProfile = () => {
         const userId = decodedToken.user_id;
         setUserId(userId);
     }, []);
+    // User Info Fetching End --------------------------------------------------------------------------------------------------------------------------
 
     return (
         <>
@@ -236,76 +277,147 @@ const LaboratoryProfile = () => {
                     {/* ------------------------------------------------End navigate-------------------------------------------------- */}
 
                     {/* ------------------------------------------------Lab Card Form Start-------------------------------------------------- */}
+                    {!isSubmitted && (
+                        <form
+                            className="container mx-auto px-4"
+                            onSubmit={handleLabInfoFormSubmit}
+                        >
+                            <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-xl rounded-lg mt-10" style={{ backgroundColor: "#E3F4F4" }}>
+                                <div className="container mx-auto px-4">
+                                    <div className="flex items-center justify-center mt-4" >
+                                        <div class="xl:w-10/12 w-full px-8">
+                                            <div class="xl:px-24 lg:flex items-center justify-center">
+                                                <div class="w-80" >
+                                                    <div class="flex items-center">
+                                                        <h1 class="text-xl font-bold pr-2 leading-5 text-gray-800">Laboratory Information</h1>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-16 lg:flex justify-between border-b border-gray-200 pb-16">
+                                                    <div>
+                                                        <div class="md:flex items-center lg:ml-24 lg:mt-0 mt-4">
+                                                            <div class="md:w-64">
+                                                                <label class="text-sm leading-none text-gray-800" id="firstName" >Laboratory Name</label>
+                                                                <input
+                                                                    type="text"
+                                                                    name="labName"
+                                                                    tabindex="0"
+                                                                    class="w-full p-3 mt-3 bg-gray-100 border rounded border-gray-200 focus:outline-none focus:border-gray-600 text-sm font-medium leading-none text-gray-800"
+                                                                    aria-labelledby="firstName"
+                                                                    value={labInfoFormData.laboratoryName}
+                                                                    onChange={handleLabInfoInputChange}
+                                                                />
+                                                            </div>
+                                                            <div class="md:w-64 md:ml-12 md:mt-0 ">
+                                                                <label class="text-sm leading-none text-gray-800" id="lastName">Phone Number</label>
+                                                                <input
+                                                                    type="text"
+                                                                    name="phoneNumber"
+                                                                    tabindex="0"
+                                                                    class="w-full p-3 mt-3 bg-gray-100 border rounded border-gray-200 focus:outline-none focus:border-gray-600 text-sm font-medium leading-none text-gray-800"
+                                                                    aria-labelledby="lastName"
+                                                                    value={labInfoFormData.phoneNumber}
+                                                                    onChange={handleLabInfoInputChange}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                        <div class="md:flex items-center lg:ml-24 mt-8">
+                                                            <div class="md:w-64">
+                                                                <label class="text-sm leading-none text-gray-800" id="emailAddress">Laboratory Location</label>
+                                                                <input
+                                                                    type="text"
+                                                                    name="location"
+                                                                    tabindex="0"
+                                                                    class="w-full p-3 mt-3 bg-gray-100 border rounded border-gray-200 focus:outline-none focus:border-gray-600 text-sm font-medium leading-none text-gray-800"
+                                                                    aria-labelledby="emailAddress"
+                                                                    value={labInfoFormData.laboratoryLocation}
+                                                                    onChange={handleLabInfoInputChange}
+                                                                />
+                                                            </div>
+                                                            <div className="md:w-64 md:ml-12 md:mt-0 ">
+                                                                <label
+                                                                    className="block mb-8 text-sm  text-gray-900 dark:text-white"
+                                                                    htmlFor="multiple_files"
+                                                                >
+                                                                    Upload Your Lab Image (images):
+                                                                </label>
+                                                                <input
+                                                                    className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-500 dark:focus:border-gray-500 dark:focus:shadow-outline-gray form-input"
+                                                                    type="file"
+                                                                    id="multiple_files"
+                                                                    name="multiple_files"
+                                                                    multiple
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                        <div class="md:flex items-center lg:ml-24 mt-10">
+                                                            <div class="md:w-64">
+                                                                <button
+                                                                    type="submit"
+                                                                    className="active:bg-pink-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-3 py-3 rounded-full outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
+                                                                    style={{ backgroundColor: "#3AA6B9" }}
+                                                                >
+                                                                    Submit To Admin
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    )}
+                    <br />
+                    {/* ------------------------------------------------Lab Card Form End-------------------------------------------------- */}
 
+                    {/* ------------------------------------------------Lab Tests Form Start-------------------------------------------------- */}
                     <form
-                        className="container mx-auto px-4"
-                        onSubmit={handleLabInfoFormSubmit}
+                    className="container mx-auto px-4"
+                    onSubmit={handleSubmit}
                     >
-                        <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-xl rounded-lg mt-10" style={{ backgroundColor: "#E3F4F4" }}>
+                        <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-xl rounded-lg mt-6" style={{ backgroundColor: "#E3F4F4" }}>
                             <div className="container mx-auto px-4">
                                 <div className="flex items-center justify-center mt-4" >
                                     <div class="xl:w-10/12 w-full px-8">
+
                                         <div class="xl:px-24 lg:flex items-center justify-center">
                                             <div class="w-80" >
                                                 <div class="flex items-center">
-                                                    <h1 class="text-xl font-bold pr-2 leading-5 text-gray-800">Laboratory Information</h1>
+                                                    <h1 class="text-xl font-bold pr-2 leading-5 text-gray-800">Laboratory Tests</h1>
                                                 </div>
                                             </div>
                                             <div class="mt-16 lg:flex justify-between border-b border-gray-200 pb-16">
                                                 <div>
                                                     <div class="md:flex items-center lg:ml-24 lg:mt-0 mt-4">
                                                         <div class="md:w-64">
-                                                            <label class="text-sm leading-none text-gray-800" id="firstName" >Laboratory Name</label>
-                                                            <input
-                                                                type="text"
-                                                                name="labName"
-                                                                tabindex="0"
-                                                                class="w-full p-3 mt-3 bg-gray-100 border rounded border-gray-200 focus:outline-none focus:border-gray-600 text-sm font-medium leading-none text-gray-800"
-                                                                aria-labelledby="firstName"
-                                                                value={labInfoFormData.laboratoryName}
-                                                                onChange={handleLabInfoInputChange}
-                                                            />
+                                                            <label class="text-sm leading-none text-gray-800" id="password">Test Name</label>
+                                                            <input type="text" tabindex="0" class="w-full p-3 mt-3 bg-gray-100 border rounded border-gray-200 focus:outline-none focus:border-gray-600 text-sm font-medium leading-none text-gray-800" aria-labelledby="password" placeholder="" />
                                                         </div>
                                                         <div class="md:w-64 md:ml-12 md:mt-0 ">
-                                                            <label class="text-sm leading-none text-gray-800" id="lastName">Phone Number</label>
-                                                            <input
-                                                                type="text"
-                                                                name="phoneNumber"
-                                                                tabindex="0"
-                                                                class="w-full p-3 mt-3 bg-gray-100 border rounded border-gray-200 focus:outline-none focus:border-gray-600 text-sm font-medium leading-none text-gray-800"
-                                                                aria-labelledby="lastName"
-                                                                value={labInfoFormData.phoneNumber}
-                                                                onChange={handleLabInfoInputChange}
-                                                            />
+                                                            <label class="text-sm leading-none text-gray-800" id="securityCode">Test Description</label>
+                                                            <input type="text" tabindex="0" class="w-full p-3 mt-3 bg-gray-100 border rounded border-gray-200 focus:outline-none focus:border-gray-600 text-sm font-medium leading-none text-gray-800" aria-labelledby="securityCode" placeholder="" />
                                                         </div>
                                                     </div>
                                                     <div class="md:flex items-center lg:ml-24 mt-8">
                                                         <div class="md:w-64">
-                                                            <label class="text-sm leading-none text-gray-800" id="emailAddress">Laboratory Location</label>
-                                                            <input
-                                                                type="text"
-                                                                name="location"
-                                                                tabindex="0"
-                                                                class="w-full p-3 mt-3 bg-gray-100 border rounded border-gray-200 focus:outline-none focus:border-gray-600 text-sm font-medium leading-none text-gray-800"
-                                                                aria-labelledby="emailAddress"
-                                                                value={labInfoFormData.laboratoryLocation}
-                                                                onChange={handleLabInfoInputChange}
-                                                            />
+                                                            <label class="text-sm leading-none text-gray-800" id="emailAddress">Sample Type</label>
+                                                            <input type="text" tabindex="0" class="w-full p-3 mt-3 bg-gray-100 border rounded border-gray-200 focus:outline-none focus:border-gray-600 text-sm font-medium leading-none text-gray-800" aria-labelledby="emailAddress" placeholder="" />
                                                         </div>
-                                                        <div className="md:w-64 md:ml-12 md:mt-0 ">
-                                                            <label
-                                                                className="block mb-8 text-sm  text-gray-900 dark:text-white"
-                                                                htmlFor="multiple_files"
-                                                            >
-                                                                Upload Your Lab Image (images):
-                                                            </label>
-                                                            <input
-                                                                className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-500 dark:focus:border-gray-500 dark:focus:shadow-outline-gray form-input"
-                                                                type="file"
-                                                                id="multiple_files"
-                                                                name="multiple_files"
-                                                                multiple
-                                                            />
+                                                        <div class="md:w-64 md:ml-12 md:mt-0 ">
+                                                            <label class="text-sm leading-none text-gray-800" id="phone" >Test Requirements</label>
+                                                            <input type="name" tabindex="0" class="w-full p-3 mt-3 bg-gray-100 border rounded border-gray-200 focus:outline-none focus:border-gray-600 text-sm font-medium leading-none text-gray-800" aria-labelledby="phone" placeholder="" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="md:flex items-center lg:ml-24 mt-8">
+                                                        <div class="md:w-64">
+                                                            <label class="text-sm leading-none text-gray-800" id="emailAddress">Test Timing</label>
+                                                            <input type="text" tabindex="0" class="w-full p-3 mt-3 bg-gray-100 border rounded border-gray-200 focus:outline-none focus:border-gray-600 text-sm font-medium leading-none text-gray-800" aria-labelledby="emailAddress" placeholder="" />
+                                                        </div>
+                                                        <div class="md:w-64 md:ml-12 md:mt-0 ">
+                                                            <label class="text-sm leading-none text-gray-800" id="phone" >Test Price</label>
+                                                            <input type="text" tabindex="0" class="w-full p-3 mt-3 bg-gray-100 border rounded border-gray-200 focus:outline-none focus:border-gray-600 text-sm font-medium leading-none text-gray-800" aria-labelledby="phone" placeholder="" />
                                                         </div>
                                                     </div>
                                                     <div class="md:flex items-center lg:ml-24 mt-10">
@@ -327,69 +439,6 @@ const LaboratoryProfile = () => {
                             </div>
                         </div>
                     </form>
-                    <br />
-                    {/* ------------------------------------------------Lab Card Form End-------------------------------------------------- */}
-
-                    {/* ------------------------------------------------Lab Tests Form Start-------------------------------------------------- */}
-                    <div className="container mx-auto px-4">
-                        <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-xl rounded-lg mt-6" style={{ backgroundColor: "#E3F4F4" }}>
-                            {/* <div className=" md:block">
-                                <img className="absolute bg-cover bg-center w-full h-full inset-0" src="https://images.wsj.net/im-190981/IM" alt />
-                            </div>
-                            <div
-                                aria-hidden="true"
-                                className="absolute inset-0 w-full h-full bg-purple-900 bg-opacity-30 backdrop-blur-sm"
-                            /> */}
-                            <div className="container mx-auto px-4">
-                                <div className="flex items-center justify-center mt-4" >
-                                    <div class="xl:w-10/12 w-full px-8">
-
-                                        <div class="xl:px-24 lg:flex items-center justify-center">
-                                            <div class="w-80" >
-                                                <div class="flex items-center">
-                                                    <h1 class="text-xl font-bold pr-2 leading-5 text-gray-800">Laboratory Tests</h1>
-                                                </div>
-                                            </div>
-                                            <div class="mt-16 lg:flex justify-between border-b border-gray-200 pb-16">
-                                                <div>
-                                                    <div class="md:flex items-center lg:ml-24 lg:mt-0 mt-4">
-                                                        <div class="md:w-64">
-                                                            <label class="text-sm leading-none text-gray-800" id="password">Test Name</label>
-                                                            <input type="text" tabindex="0" class="w-full p-3 mt-3 bg-gray-100 border rounded border-gray-200 focus:outline-none focus:border-gray-600 text-sm font-medium leading-none text-gray-800" aria-labelledby="password" placeholder="" />
-                                                        </div>
-                                                        <div class="md:w-64 md:ml-12 md:mt-0 ">
-                                                            <label class="text-sm leading-none text-gray-800" id="securityCode">Test Description</label>
-                                                            <input type="name" tabindex="0" class="w-full p-3 mt-3 bg-gray-100 border rounded border-gray-200 focus:outline-none focus:border-gray-600 text-sm font-medium leading-none text-gray-800" aria-labelledby="securityCode" placeholder="" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="md:flex items-center lg:ml-24 mt-8">
-                                                        <div class="md:w-64">
-                                                            <label class="text-sm leading-none text-gray-800" id="emailAddress">Sample Type</label>
-                                                            <input type="email" tabindex="0" class="w-full p-3 mt-3 bg-gray-100 border rounded border-gray-200 focus:outline-none focus:border-gray-600 text-sm font-medium leading-none text-gray-800" aria-labelledby="emailAddress" placeholder="" />
-                                                        </div>
-                                                        <div class="md:w-64 md:ml-12 md:mt-0 ">
-                                                            <label class="text-sm leading-none text-gray-800" id="phone" >Test Requirements</label>
-                                                            <input type="name" tabindex="0" class="w-full p-3 mt-3 bg-gray-100 border rounded border-gray-200 focus:outline-none focus:border-gray-600 text-sm font-medium leading-none text-gray-800" aria-labelledby="phone" placeholder="" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="md:flex items-center lg:ml-24 mt-8">
-                                                        <div class="md:w-64">
-                                                            <label class="text-sm leading-none text-gray-800" id="emailAddress">Test Timing</label>
-                                                            <input type="email" tabindex="0" class="w-full p-3 mt-3 bg-gray-100 border rounded border-gray-200 focus:outline-none focus:border-gray-600 text-sm font-medium leading-none text-gray-800" aria-labelledby="emailAddress" placeholder="" />
-                                                        </div>
-                                                        <div class="md:w-64 md:ml-12 md:mt-0 ">
-                                                            <label class="text-sm leading-none text-gray-800" id="phone" >Test Price</label>
-                                                            <input type="name" tabindex="0" class="w-full p-3 mt-3 bg-gray-100 border rounded border-gray-200 focus:outline-none focus:border-gray-600 text-sm font-medium leading-none text-gray-800" aria-labelledby="phone" placeholder="" />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <br />
                     <br />
                     {/* ------------------------------------------------Lab Tests Form End-------------------------------------------------- */}

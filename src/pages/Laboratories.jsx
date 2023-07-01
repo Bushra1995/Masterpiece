@@ -16,7 +16,7 @@ const Laboratories = () => {
 
     useEffect(() => {
         axios
-            .get('http://localhost:4000/laboratories')
+            .get('http://localhost:4000/lab/laboratories')
             .then((response) => {
                 setLaboratories(response.data);
                 console.log(response.data);
@@ -87,6 +87,7 @@ const Laboratories = () => {
                                         <div className="service-content">
                                             <h4>{laboratory.labName}</h4>
                                             <p>{laboratory.phoneNumber}</p>
+                                            <p>{laboratory.location}</p>
                                             <Link to={`LabPage/${laboratory._id}`} className="read-more text-decoration-none">
                                                 Go to the Lab <i className="lni lni-arrow-right" />
                                             </Link>
