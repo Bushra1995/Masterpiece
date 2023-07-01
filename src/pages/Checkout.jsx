@@ -1,316 +1,150 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-unused-vars */
-import * as React from "react";
-import CssBaseline from "@mui/material/CssBaseline";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
-import Paper from "@mui/material/Paper";
-import Stepper from "@mui/material/Stepper";
-import Step from "@mui/material/Step";
-import StepLabel from "@mui/material/StepLabel";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import AddressForm from "../components/UI/AddressForm";
-import PaymentForm from "../components/UI/PaymentForm";
-import Review from "../components/UI/Review";
-import { indigo } from "@mui/material/colors";
-import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import SummaryTable from "../components/UI/SummaryTable";
 
-const steps = ["Booking Time", "Payment details", "Review your order"];
 
-const defaultTheme = createTheme();
+const Checkout = () => {
 
-export default function Checkout() {
-    const currentDate = new Date();
-
-    const { slug } = useParams();
-
-    const [provider, setProvider] = React.useState();
-    const [car, setCar] = React.useState();
-    const [customer, setCustomer] = React.useState();
-
-    const navigate = useNavigate(); // useNavigate hook to get access to the navigate function
-    const [activeStep, setActiveStep] = React.useState(0);
-
-    const [date, setDate] = useState({
-        startDate: "",
-        endDate: "",
-    });
-
-    const [cridetCard, setCridetCard] = useState({
-        cardName: "",
-        cardNumber: "",
-        expDate: "",
-        cvv: "",
-    });
-
-    const [review, setReview] = useState({
-        price: 0,
-        startDate: date.startDate,
-        endDate: date.endDate,
-    });
-
-    const getCar = async (slug) => {
-        let car_ = {};
-
-        try {
-            const response = await axios.get(`http://localhost:5000/cars/${slug}`);
-
-            setCar(response.data[0]);
-            car_ = response.data[0];
-        } catch (error) {
-            console.error(error);
-        }
-        return car_;
-    };
-
-    const getProvider = async (id_provider) => {
-        let pro = {};
-        try {
-            const response = await axios.get(
-                `http://localhost:5000/provider/${id_provider}`
-            );
-
-            setProvider(response.data);
-            pro = response.data;
-        } catch (error) {
-            console.error(error);
-        }
-        return pro;
-    };
-
-    const getCustomer = async () => {
-        const token = localStorage.getItem("token") || "";
-        let cus = {};
-
-        try {
-            const response = await axios.get(`http://localhost:5000/checkToken`, {
-                headers: {
-                    authorization: `Bearer ${token}`,
-                },
-            });
-
-            setCustomer(response.data);
-            cus = response.data;
-        } catch (error) {
-            console.error(error);
-        }
-        return cus;
-    };
-
-    const joinGetData = async () => {
-        const car = await getCar(slug);
-        const provider = await getProvider(car.provider_id);
-        const customer = await getCustomer();
-    };
-
-    React.useEffect(() => {
-        joinGetData();
+    useEffect(() => {
+        window.scrollTo(0, 0);
     }, []);
 
-    React.useEffect(() => {
-        setReview({
-            price: car?.rental_price,
-            startDate: date.startDate,
-            finalDate: date.endDate,
-        });
-    }, [date, car]);
 
-    const bookCar = async (start_date, end_date) => {
-        try {
-            const res = await axios.put(
-                `http://localhost:5000/bookCar/${car.cars_id}`,
-                {
-                    user_id: customer.customers_id,
-                    start_date: start_date,
-                    end_date: end_date,
-                }
-            );
-            console.log(res);
-        } catch (err) {
-            console.log(err);
-        }
+    const [dropdown1, setDropdown1] = useState(false);
+    const [dropdown2, setDropdown2] = useState(false);
+    const [changeText1, setChangeText1] = useState("Gender");
+    const [changeText2, setChangeText2] = useState("Age Group");
+
+
+    const HandleText1 = (e) => {
+        setChangeText1(e);
+        setDropdown1(false);
     };
 
-    const updateCustomerCard = async (
-        customers_id,
-        cardNumber,
-        cardName,
-        expDate,
-        cvv
-    ) => {
-        try {
-            const res = await axios.put(
-                `http://localhost:5000/update_card/${customers_id}`,
-                {
-                    credit_card: cardNumber,
-                    cardholder_name: cardName,
-                    card_expiration_date: expDate,
-                    cvv_cvc_code: cvv,
-                }
-            );
-            console.log(res);
-        } catch (err) {
-            console.log(err);
-        }
+    const HandleText2 = (e) => {
+        setChangeText2(e);
+        setDropdown2(false);
     };
-
-    const createMovements = async (customers_id, move_type, date, car_id) => {
-        try {
-            const res = await axios.post(
-                `http://localhost:5000/createMoveCustomer/${customers_id}`,
-                {
-                    move_type: move_type,
-                    date: date,
-                    car_id: car_id,
-                    customers_id: customers_id,
-                }
-            );
-            console.log(res);
-        } catch (err) {
-            console.log(err);
-        }
-    };
-
-    const handleNext = async () => {
-        if (activeStep === steps.length - 1) {
-            await bookCar(date.startDate, date.endDate);
-            await updateCustomerCard(
-                customer.customers_id,
-                cridetCard.cardNumber,
-                cridetCard.cardName,
-                cridetCard.expDate,
-                cridetCard.cvv
-            );
-            await createMovements(
-                customer.customers_id,
-                "rent",
-                currentDate.toDateString(),
-                car.cars_id
-            );
-        }
-        setActiveStep(activeStep + 1);
-    };
-
-    const handleBack = () => {
-        setActiveStep(activeStep - 1);
-    };
-
-    const handleGoBackHome = () => {
-        navigate("/"); // navigate to the home page
-    };
-
-    function getStepContent(step, handleNext) {
-        switch (step) {
-            case 0:
-                return <AddressForm handleNext={handleNext} setDate={setDate} />;
-            case 1:
-                return (
-                    <PaymentForm handleNext={handleNext} setCridetCard={setCridetCard} />
-                );
-            case 2:
-                return <Review review={review} />;
-            default:
-                throw new Error("Unknown step");
-        }
-    }
-
-    const theme = createTheme({
-        typography: {
-            fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
-        },
-        components: {
-            MuiButton: {
-                styleOverrides: {
-                    root: {
-                        backgroundColor: "#000D6B",
-                        alignSelf: "flex-end",
-                    },
-                },
-            },
-        },
-    });
 
     return (
-        <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <AppBar
-                position="absolute"
-                color="default"
-                elevation={0}
-                sx={{
-                    position: "relative",
-                    borderBottom: (t) => `1px solid ${t.palette.divider}`,
-                }}
-            />
-            <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
-                <Paper
-                    variant="outlined"
-                    sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
-                >
-                    <Typography
-                        component="h1"
-                        variant="h4"
-                        align="center"
-                        style={{ color: "#3AA6B9" }}
+
+        <div className="overflow-y-hidden">
+            <div className="flex-col justify-center items-center 2xl:container 2xl:mx-auto lg:py-16 md:py-12 py-9 px-4 md:px-6 lg:px-20 xl:px-44 bg-gray-100 shadow mb-6 mt-6">
+                <div className="flex w-full sm:w-9/12 lg:w-full flex-col lg:flex-col justify-center items-center lg:space-x-10 2xl:space-x-20 space-y-12 lg:space-y-0">
+                    <div className="flex w-full  flex-col justify-start items-start">
+                        <div className="row">
+                            <p className="text-3xl lg:text-4xl font-semibold leading-7 lg:leading-9 text-gray-800">Check out</p>
+                        </div>
+                        <div className="mt-2">
+                            <Link to="/" className="text-base leading-4 underline  hover:text-gray-800 text-gray-600">
+                                Back to Home
+                            </Link>
+                        </div>
+
+                        <div className="mt-12">
+                            <p className="text-xl font-semibold leading-5 text-gray-800">Complete Your Information</p>
+                        </div>
+                        <div className="mt-8 flex flex-col justify-start items-start w-full space-y-8">
+                            <div className="flex justify-between flex-col sm:flex-row w-full items-start space-y-8 sm:space-y-0 sm:space-x-8">
+                                <input className="px-2 focus:outline-none focus:ring-2 focus:ring-gray-500 border-b border-gray-200 leading-4 text-base placeholder-gray-600 py-4 w-full" type="text" placeholder="First Name" />
+                                <input className="px-2 focus:outline-none focus:ring-2 focus:ring-gray-500 border-b border-gray-200 leading-4 text-base placeholder-gray-600 py-4 w-full" type="text" placeholder="Middle Name" />
+                                <input className="px-2 focus:outline-none focus:ring-2 focus:ring-gray-500 border-b border-gray-200 leading-4 text-base placeholder-gray-600 py-4 w-full" type="text" placeholder="Third Name" />
+                                <input className="px-2 focus:outline-none focus:ring-2 focus:ring-gray-500 border-b border-gray-200 leading-4 text-base placeholder-gray-600 py-4 w-full" type="text" placeholder="Last Name" />
+                            </div>
+                            <div className="flex justify-between flex-col sm:flex-row w-full items-start space-y-8 sm:space-y-0 sm:space-x-8">
+                                <div className="relative w-full">
+                                    <p id="button1" className=" px-2 border-b border-gray-200 text-left leading-4 text-base text-gray-600 py-4 w-full">
+                                        {changeText1}
+                                    </p>
+                                    <button onClick={() => setDropdown1(!dropdown1)} className="focus:outline-none focus:ring-2 focus:ring-gray-500 rounded-full cursor-pointer absolute bottom-4 right-0">
+                                        <svg id="close" className={` transform ${dropdown1 ? "rotate-180" : ""}  `} width={16} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M12 6L8 10L4 6" stroke="#4B5563" strokeLinecap="round" strokeLinejoin="round" />
+                                        </svg>
+                                    </button>
+                                    <div className={`shadow absolute z-10 bg-white top-10  w-full mt-3 ${dropdown1 ? "" : "hidden"}`}>
+                                        <div className="flex flex-col  w-full">
+                                            <p tabIndex={0} onClick={() => HandleText1("Female")} className="focus:outline-none cursor-pointer px-3 hover:text-white hover:bg-gray-800 focus:bg-gray-800 focus:text-white text-left  text-base text-gray-600 py-2 w-full">
+                                                Female
+                                            </p>
+                                            <p tabIndex={0} onClick={() => HandleText1("Male")} className="focus:outline-none cursor-pointer px-3 hover:text-white hover:bg-gray-800 focus:bg-gray-800 focus:text-white text-left  text-base text-gray-600 py-2 w-full">
+                                                Male
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="relative w-full">
+                                    <p id="button1" className=" px-2 border-b border-gray-200 text-left leading-4 text-base text-gray-600 py-4 w-full">
+                                        {changeText2}
+                                    </p>
+                                    <button onClick={() => setDropdown2(!dropdown2)} className="focus:outline-none focus:ring-2 focus:ring-gray-500 rounded-full cursor-pointer absolute bottom-4 right-0">
+                                        <svg id="close" className={` transform ${dropdown2 ? "rotate-180" : ""}  `} width={16} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M12 6L8 10L4 6" stroke="#4B5563" strokeLinecap="round" strokeLinejoin="round" />
+                                        </svg>
+                                    </button>
+                                    <div className={`shadow absolute z-10 bg-white top-10  w-full mt-3 ${dropdown2 ? "" : "hidden"}`}>
+                                        <div className="flex flex-col  w-full">
+                                            <p tabIndex={0} onClick={() => HandleText2("Newborns")} className="focus:outline-none cursor-pointer px-3 hover:text-white hover:bg-gray-800 focus:bg-gray-800 focus:text-white text-left  text-base text-gray-600 py-2 w-full">
+                                                Newborns
+                                            </p>
+                                            <p tabIndex={0} onClick={() => HandleText2("Children")} className="focus:outline-none cursor-pointer px-3 hover:text-white hover:bg-gray-800 focus:bg-gray-800 focus:text-white text-left  text-base text-gray-600 py-2 w-full">
+                                                Children
+                                            </p>
+                                            <p tabIndex={0} onClick={() => HandleText2("Adults")} className="focus:outline-none cursor-pointer px-3 hover:text-white hover:bg-gray-800 focus:bg-gray-800 focus:text-white text-left  text-base text-gray-600 py-2 w-full">
+                                                Adults
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div className="flex justify-between flex-col sm:flex-row w-full items-start space-y-8 sm:space-y-0 sm:space-x-8">
+                                <input className="px-2 focus:outline-none focus:ring-2 focus:ring-gray-500 border-b border-gray-200 leading-4 text-base placeholder-gray-600 py-4 w-full" type="text" placeholder="Address" />
+                                <input className="focus:outline-none focus:ring-2 focus:ring-gray-500 px-2 border-b border-gray-200 leading-4 text-base placeholder-gray-600 py-4   w-full" type="text" placeholder="Phone Number" />
+                            </div>
+                            <div className="flex justify-between flex-col sm:flex-row w-full items-start space-y-8 sm:space-y-0 sm:space-x-8">
+                                <div className="w-full">
+                                    <input className="focus:outline-none focus:ring-2 focus:ring-gray-500 px-2 border-b border-gray-200 leading-4 text-base placeholder-gray-600 pt-4 pb-3   w-full" type="text" placeholder="Card Holder Name" />
+                                </div>
+                                <div className="w-full">
+                                    <input className="focus:outline-none focus:ring-2 focus:ring-gray-500 px-2 border-b border-gray-200 leading-4 text-base placeholder-gray-600 pt-4 pb-3   w-full" type="text" placeholder="Card Number" />
+                                </div>
+                            </div>
+                            <div className="flex justify-between flex-col sm:flex-row w-full items-start space-y-8 sm:space-y-0 sm:space-x-8">
+                                <div className="w-full">
+                                    <input className="focus:outline-none focus:ring-2 focus:ring-gray-500 px-2 border-b border-gray-200 leading-4 text-base placeholder-gray-600 pt-4 pb-3   w-full" type="text" placeholder="CVC" />
+                                </div>
+                                <div className="w-full">
+                                    <input className="focus:outline-none focus:ring-2 focus:ring-gray-500 px-2 border-b border-gray-200 leading-4 text-base placeholder-gray-600 pt-4 pb-3   w-full" type="date" placeholder="" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="flex justify-center w-full mt-4">
+                    <button
+                        className="mt-2 font-medium leading-4 py-3 px-4 text-white text-center text-decoration-none rounded"
+                        style={{ backgroundColor: '#3AA6B9' }}
                     >
-                        Checkout
-                    </Typography>
-                    <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
-                        {steps.map((label) => (
-                            <Step key={label}>
-                                <StepLabel>{label}</StepLabel>
-                            </Step>
-                        ))}
-                    </Stepper>
-                    {activeStep === steps.length ? (
-                        <React.Fragment>
-                            <Typography variant="h5" gutterBottom>
-                                Thank you for your order.
-                            </Typography>
-                            <Typography variant="subtitle1">
-                                We have emailed your order confirmation.
-                            </Typography>
-                            <Box display="flex" justifyContent="flex-end" alignItems="flex-end">
-                                <Button
-                                    onClick={handleGoBackHome}
-                                    sx={{ mt: 3, ml: 1, color: "white" }}
-                                >
-                                    Go Back Home
-                                </Button>
-                            </Box>
-                        </React.Fragment>
-                    ) : (
-                        <React.Fragment>
-                            {getStepContent(activeStep, handleNext)}
-                            <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
-                                {activeStep !== 0 && (
-                                    <Button
-                                        onClick={handleBack}
-                                        sx={{ mt: 3, ml: 1, color: "white" }}
-                                        style={{ backgroundColor: "#3AA6B9" }}
-                                    >
-                                        Back
-                                    </Button>
-                                )}
-                                {activeStep === 2 ? (
-                                    <Button
-                                        variant="contained"
-                                        onClick={handleNext}
-                                        sx={{ mt: 3, ml: 1 }}
-                                    >
-                                        {activeStep === steps.length - 1 ? "Place order" : "Next"}
-                                    </Button>
-                                ) : null}
-                            </Box>
-                        </React.Fragment>
-                    )}
-                </Paper>
-            </Container>
-        </ThemeProvider>
+                        Submit
+                    </button>
+                </div>
+            </div>
+            {/* ------ Render Summary Table Here ------ */}
+            <div className="w-3/4 mx-auto">
+                <SummaryTable />
+            </div>
+            <Link to="#" className="flex justify-center items-center text-decoration-none">
+                <button
+                    className="mt-2 mb-4 font-medium leading-4 py-4 w-50 md:w-4/12 lg:w-50 text-white text-center text-decoration-none rounded"
+                    style={{ backgroundColor: '#3AA6B9' }}
+                >
+                    Complete Payment
+                </button>
+            </Link>
+        </div>
+
     );
 }
+
+export default Checkout

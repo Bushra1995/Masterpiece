@@ -1,7 +1,12 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function SignUp() {
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
     const [formData, setFormData] = useState({
         firstname: "",
         lastname: "",
@@ -32,7 +37,7 @@ export default function SignUp() {
                 passErrorRef.current.textContent = "";
             }
 
-            const response = await fetch("http://localhost:3100/user/signup", {
+            const response = await fetch("http://localhost:4000/user/signup", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -44,7 +49,14 @@ export default function SignUp() {
                 const data = await response.json();
                 // Store the token in localStorage
                 localStorage.setItem("token", data.token);
-                navigate("/");
+                // navigate("/");
+                if (formData.role === "laboratory") {
+                    navigate("/labProfile"); // Redirect to laboratory profile page
+                } else if (formData.role === "patient") {
+                    navigate("/"); // Redirect to patient profile page
+                } else {
+                    navigate("/"); // Default redirection to home page
+                }
 
                 // Handle the response data as needed
                 console.log(data);
@@ -62,9 +74,9 @@ export default function SignUp() {
     };
 
     const handleChange = (e) => {
-        if (e.target.name === "email" && showAlert) {
-            setShowAlert(false);
-        }
+        // if (e.target.name === "email" && showAlert) {
+        //     setShowAlert(false);
+        // }
 
         setFormData((prevData) => ({
             ...prevData,
@@ -92,27 +104,27 @@ export default function SignUp() {
                             Choose a type of account
                         </h1>
                         <div className="flex justify-center mt-5">
-                            <label htmlFor="donor" className="mr-4">
+                            <label htmlFor="laboratory" className="mr-4">
                                 <input
                                     type="radio"
-                                    id="donor"
+                                    id="laboratory"
                                     name="role"
-                                    value="donor"
-                                    checked={formData.role === "donor"}
+                                    value="laboratory"
+                                    checked={formData.role === "laboratory"}
                                     onChange={handleChange}
                                 />
-                                <span className="ml-2">Donor</span>
+                                <span className="ml-2">Laboratory</span>
                             </label>
-                            <label htmlFor="student" className="ml-4">
+                            <label htmlFor="patient" className="ml-4">
                                 <input
                                     type="radio"
-                                    id="student"
+                                    id="patient"
                                     name="role"
-                                    value="student"
-                                    checked={formData.role === "student"}
+                                    value="patient"
+                                    checked={formData.role === "patient"}
                                     onChange={handleChange}
                                 />
-                                <span className="ml-2">Student</span>
+                                <span className="ml-2">Patient</span>
                             </label>
                         </div>
                     </div>

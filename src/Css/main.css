@@ -2129,7 +2129,7 @@ margin-top: 1rem;
 .service-section .service-item {
   border-radius: 20px;
   -webkit-box-shadow: 0 10px 35px rgba(0, 173, 181, 0.14);
-  box-shadow: 0 10px 35px rgba(0, 173, 181, 0.14);
+  box-shadow: 0 10px 35px rgba(0, 172, 181, 0.34);
   -webkit-transition: all 0.3s ease-out 0s;
   transition: all 0.3s ease-out 0s;
   position: relative;
@@ -2144,6 +2144,12 @@ margin-top: 1rem;
 
 .service-section .service-item .service-content h4 {
   margin-bottom: 20px;
+}
+.service-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 .service-section .service-item .service-content p {
@@ -2177,14 +2183,14 @@ margin-top: 1rem;
   top: 0;
   left: 0;
   border-radius: 20px;
-  background: rgba(0, 173, 181, 0.91);
+  background: #00adb5e8;
 }
 
 .service-section .service-item:hover .service-icon svg path {
   fill: #fff;
 }
 
-.service-section .service-item:hover .service-content h4, .service-section .service-item:hover .service-content p, .service-section .service-item:hover .service-content a {
+.service-section .service-item:hover .service-content h4, .service-item:hover .service-content h1, .service-section .service-item:hover .service-content p, .service-section .service-item:hover .service-content a {
   color: #fff;
 }
 

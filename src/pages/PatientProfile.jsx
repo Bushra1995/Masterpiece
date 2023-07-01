@@ -1,5 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
+import SummaryTable from "../components/UI/SummaryTable";
+
 
 const PatientProfile = () => {
   return (
@@ -179,7 +181,7 @@ const PatientProfile = () => {
 
                         <div className="flex flex-col mb-8 md:w-64">
                           <label className="mb-3 text-lg leading-none text-gray-800">
-                          Email Address
+                            Email Address
                           </label>
                           <p className="bg-gray-100 text-sm font-medium leading-none text-gray-800 p-3 border rounded border-gray-200">
                             {/* {user && user.email} */}
@@ -213,8 +215,10 @@ const PatientProfile = () => {
           {role === "donor" ? <Inputs /> : null} */}
         </section>
 
-{/* Patient Test History that the lab sent with its results with normal ranges */}
-
+        {/* Patient Test History that the lab sent with its results with normal ranges */}
+        <div className="w-3/4 mx-auto">
+          <SummaryTable />
+        </div>
       </main>
 
 
@@ -223,6 +227,7 @@ const PatientProfile = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-center mt-4" >
           <div class="xl:w-10/12 w-full px-8">
+            
             <div class="bg-gray-100 py-12 flex flex-wrap items-center justify-center">
               <div className="w-52 h-16 relative md:mt-0 mt-4">
                 <button

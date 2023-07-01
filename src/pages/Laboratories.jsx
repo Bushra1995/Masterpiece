@@ -1,18 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import '../Css/main.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import svg3 from '../img/shapes/shape-3.svg';
-import megaLab from '../img/service/megaLab.png';
-import bioLab from '../img/service/biolab.png';
 import { Link } from "react-router-dom";
-import NoTransitionExample from "../components/ControlledCarousel";
+import axios from 'axios';
 
 const Laboratories = () => {
 
+    const [laboratories, setLaboratories] = useState([]);
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
+    useEffect(() => {
+        axios
+            .get('http://localhost:4000/laboratories')
+            .then((response) => {
+                setLaboratories(response.data);
+                console.log(response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, []);
+
     return (
         <>
-        {/* <NoTransitionExample /> */}
+            {/* <NoTransitionExample /> */}
             {/* ========================= Laboratory-section start ========================= */}
             <section id="services" className="service-section pt-80 mb-5">
                 <div className=" shape-3">
@@ -22,7 +38,6 @@ const Laboratories = () => {
                     <div className="row">
                         <div className="col-xl-8 mx-auto">
                             <div className="section-title text-center mb-55">
-                                {/* <span class="wow fadeInDown" data-wow-delay=".2s">Services</span> */}
                                 <h2 className="mb-15 wow fadeInUp" data-wow-delay=".4s">
                                     Our Laboratories
                                 </h2>
@@ -35,6 +50,11 @@ const Laboratories = () => {
                         </div>
                     </div>
                     <div className="row">
+
+
+                        {/* ---this where I want to get the lab that the admin approved------the first card original / the seconed modefied to get the data------------------------------------------------------------------ */}
+
+                        {/* 
                         <div className="col-lg-4 col-md-6">
                             <div className="service-item mb-30">
                                 <div className="service-icon mb-25">
@@ -53,8 +73,35 @@ const Laboratories = () => {
                                 </div>
                                 <div className="service-overlay img-bg" />
                             </div>
+                        </div> */}
+
+
+                        <div>
+                            {/* Render the list of laboratories */}
+                            {laboratories.map((laboratory) => (
+                                <div className="col-lg-4 col-md-6" key={laboratory._id}>
+                                    <div className="service-item mb-30">
+                                        <div className="service-icon mb-25">
+                                            <img className="labimg" src={laboratory.images} alt="" />
+                                        </div>
+                                        <div className="service-content">
+                                            <h4>{laboratory.labName}</h4>
+                                            <p>{laboratory.phoneNumber}</p>
+                                            <Link to={`LabPage/${laboratory._id}`} className="read-more text-decoration-none">
+                                                Go to the Lab <i className="lni lni-arrow-right" />
+                                            </Link>
+                                        </div>
+                                        <div className="service-overlay img-bg" />
+                                    </div>
+                                </div>
+                            ))}
                         </div>
-                        <div className="col-lg-4 col-md-6">
+
+
+
+
+                        {/* --------------------------------------------------------------------------------------------------------------------------------- */}
+                        {/* <div className="col-lg-4 col-md-6">
                             <div className="service-item mb-30">
                                 <div className="service-icon mb-25">
                                     {" "}
@@ -95,7 +142,7 @@ const Laboratories = () => {
                                 </div>
                                 <div className="service-overlay img-bg" />
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </section>

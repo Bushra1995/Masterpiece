@@ -288,7 +288,7 @@
 
 
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import bgImage from "../../assets/Images/slider.png"
 // import doctor from "../../img/slider/slider-2.jpg"
@@ -296,6 +296,11 @@ import logo from "../../assets/Images/logo.png"
 
 
 function ComplexNavbar() {
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
+
     const [menu, setMenu] = useState(false);
     return (
         <>
@@ -307,7 +312,7 @@ function ComplexNavbar() {
                     aria-hidden="true"
                     className="absolute inset-0 w-full h-full bg-purple-900 bg-opacity-30 backdrop-blur-sm"
                 />
-                
+
                 <nav className="lg:hidden relative z-50">
                     <div className="flex py-2 justify-between items-center px-4">
                         <div>

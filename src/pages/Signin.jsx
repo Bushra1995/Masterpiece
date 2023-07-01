@@ -1,7 +1,13 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import getItem from "../utils/jwtUtils";
 
 export default function Login() {
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
@@ -21,7 +27,7 @@ export default function Login() {
         setPasswordErrorMessage("");
 
         try {
-            const response = await fetch("http://localhost:3100/user/login", {
+            const response = await fetch("http://localhost:4000/user/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -33,7 +39,20 @@ export default function Login() {
                 const data = await response.json();
                 localStorage.setItem("token", data.token);
                 console.log("Login successful");
-                navigate("/");
+                // navigate("/");
+// Get the decoded token payload
+const decodedToken = getItem(data.token);
+            
+// Check the role from the decoded token
+if (decodedToken.role === "laboratory") {
+    navigate("/labProfile");
+} else if (decodedToken.role === "patient") {
+    navigate("/patientProfile");
+} else {
+    // Handle unknown role
+    console.log("Unknown role");
+}
+                
             } else if (response.status === 409) {
                 setEmailErrorMessage("The email address is not registered");
             } else {
@@ -97,8 +116,8 @@ export default function Login() {
                                 value={formData.password}
                                 onChange={handleChange}
                                 className={`block w-full p-2 border rounded border-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-transparent ${passwordErrorMessage
-                                        ? "The email or password are not valid"
-                                        : ""
+                                    ? "The email or password are not valid"
+                                    : ""
                                     }`}
                                 placeholder="Password"
                             />

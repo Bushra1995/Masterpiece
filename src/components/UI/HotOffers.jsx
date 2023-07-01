@@ -19,11 +19,11 @@ const Banner = () => {
         <div className="mx-auto container py-12 px-6 xl:px-0 flex justify-center items-center flex-col">
             <div className="flex justify-between bg-gray-50 items-stretch flex-row">
                 <div className="flex items-center bg-gray-800 justify-center">
-                    <p className="transform flex flex-shrink-0 -rotate-90 text-2xl font-semibold tracking-wide leading-normal text-white">50% OFF</p>
+                    <h4 className="transform flex flex-shrink-0 -rotate-90 text-2xl font-semibold tracking-wide leading-normal text-red-600">50% OFF</h4>
                 </div>
                 <div className="flex justify-center items-start flex-col xl:w-2/5 md:w-5/12 xl:px-7 px-6 md:px-0 md:py-0 py-5">
                     <div>
-                        <p className="text-3xl xl:text-4xl font-semibold leading-9 text-gray-800">Best Tests Offers</p>
+                        <h3 className="text-3xl xl:text-4xl font-semibold leading-9 text-gray-800">Best Tests Offers</h3>
                     </div>
                     <div className="xl:mt-4 mt-2">
                         <p className="text-base xl:text-xl leading-7 text-gray-600 pr-4">Furniture that looks modern and is comfortable as well. Avail the 50% offer now.</p>

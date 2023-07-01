@@ -1,9 +1,24 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import svg1 from '../img/shapes/shape-1.svg';
 import svg3 from '../img/shapes/shape-3.svg';
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const LabPage = () => {
+
+    const [test, setTest] = useState([]);
+
+    useEffect(() => {
+        axios.get('http://localhost:4000/test')
+            .then(response => {
+                setTest(response.data);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }, []);
+
+
     return (
         <>
 
@@ -81,11 +96,10 @@ const LabPage = () => {
                         </div>
                     </div>
                     <div className="row">
-                        <div className="col-lg-4 col-md-6">
+
+                        {/* <div className="col-lg-4 col-md-6">
                             <div className="service-item mb-30">
                                 <div className="service-icon mb-25">
-                                    {" "}
-                                    {/* <img className="labimg" src={megaLab} alt="" /> */}
                                 </div>
                                 <div className="service-content">
                                     <h4>Vitamin B 12</h4>
@@ -99,49 +113,28 @@ const LabPage = () => {
                                 </div>
                                 <div className="service-overlay img-bg" />
                             </div>
+                        </div> */}
+
+
+                        <div>
+                            {test.map(item => (
+                                <div className="col-lg-4 col-md-6" key={item.id}>
+                                    <div className="service-item mb-30">
+                                        <div className="service-icon mb-25"></div>
+                                        <div className="service-content">
+                                            <h4>{item.title}</h4>
+                                            <p>{item.description}</p>
+                                            <Link to="#" className="read-more text-decoration-none">
+                                                More Details <i className="lni lni-arrow-right" />
+                                            </Link>
+                                        </div>
+                                        <div className="service-overlay img-bg" />
+                                    </div>
+                                </div>
+                            ))}
                         </div>
-                        <div className="col-lg-4 col-md-6">
-                            <div className="service-item mb-30">
-                                <div className="service-icon mb-25">
-                                    {" "}
-                                    {/* <img
-                                        className="labimg"
-                                        src={bioLab}
-                                        alt=""
-                                    /> */}
-                                </div>
-                                <div className="service-content">
-                                    <h4>Ferritin</h4>
-                                    <p>
-                                        Biolab’s mandate is to provide high-quality, cost-effective
-                                        laboratory operation through .
-                                    </p>
-                                    <Link to="#" className="read-more text-decoration-none">
-                                        More Details <i className="lni lni-arrow-right" />
-                                    </Link>
-                                </div>
-                                <div className="service-overlay img-bg" />
-                            </div>
-                        </div>
-                        <div className="col-lg-4 col-md-6">
-                            <div className="service-item mb-30">
-                                <div className="service-icon mb-25">
-                                    {" "}
-                                    {/* <img className="labimg" src={megaLab} alt="" /> */}
-                                </div>
-                                <div className="service-content">
-                                    <h4>Vitamin D</h4>
-                                    <p>
-                                        We operate diagnostic medical laboratories in 22 different
-                                        location branches throughout the country.
-                                    </p>
-                                    <Link to="#" className="read-more text-decoration-none">
-                                        More Details <i className="lni lni-arrow-right" />
-                                    </Link>
-                                </div>
-                                <div className="service-overlay img-bg" />
-                            </div>
-                        </div>
+
+
                     </div>
                 </div>
             </section>
@@ -152,7 +145,7 @@ const LabPage = () => {
 
             <div className="py-16 bg-white">
                 <div className="container m-auto px-6 text-gray-600 md:px-12 xl:px-6">
-                    <div  className="lg:bg-gray-50 dark:lg:bg-darker lg:p-16 rounded-[4rem] space-y-6 md:flex md:gap-6 justify-center md:space-y-0 lg:items-center" style={{ boxShadow: '8px 8px 10px rgba(0, 0, 255, 0.1)' }}>
+                    <div className="lg:bg-gray-50 dark:lg:bg-darker lg:p-16 rounded-[4rem] space-y-6 md:flex md:gap-6 justify-center md:space-y-0 lg:items-center" style={{ boxShadow: '8px 8px 10px rgba(0, 0, 255, 0.1)' }}>
                         <div className="md:5/12 lg:w-5/12">
                             <img
                                 src="https://cdn.labmanager.com/assets/articleNo/5407/iImg/12323/942652e3-681c-4acd-973e-15a1beb0baa8-ls-teamtrouble-640x360.jpg"
@@ -183,8 +176,8 @@ const LabPage = () => {
             </div>
 
             <div className=" shape-3">
-                    <img src={svg3} alt="" />
-                </div>
+                <img src={svg3} alt="" />
+            </div>
 
             {/* --------------------------------------------------------- Our Team Section ------------------------------------------------------------------- */}
 
