@@ -16,7 +16,9 @@ import LabPage from './pages/LabPage';
 import ContactUs from './pages/ContactUs';
 import TestDetails from './pages/TestDetails';
 import SummaryTable from './components/UI/SummaryTable';
-import Admin from './components/Dashboard/Admin';
+import LaboratoryHome from "./pages/LaboratoryHome";
+import Admin from './Dashboard/Admin';
+import LabReq from './Dashboard/LabReq';
 
 function App() {
 
@@ -35,11 +37,14 @@ function App() {
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/laboratories" element={<Laboratories />} />       {/* renders in home page */}
           <Route path="/testCards" element={<TestCards />} />             {/* showed when patient click on a lab from the home page so here he can choose the tests to perform */}
-          <Route path="/LabPage" element={<LabPage />} />
+          <Route path="/LabPage/:id" element={<LabPage />} />
           <Route path="/testDetails" element={<TestDetails />} />
-          <Route path="/checkout" element={<Checkout />} />                {/* showed when the patient choose a test to perform and if an out patient choose call service */}
+          <Route path="/checkout" element={<Checkout />} />               {/* showed when the patient choose a test to perform and if an out patient choose call service */}
           <Route path="/summary" element={<SummaryTable />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/labreq" element={<LabReq />} />
+          <Route path="/testreq" element={<LabReq />} />
+          <Route path="/index" element={<LaboratoryHome />} />            {/* Make this component to be hero for the Labpage */}
           <Route path="/patientProfile" element={<PatientProfile />} />   {/* showed after the patient click on the profile avatar in home page after he logged in */}
           <Route path="/labProfile" element={<LaboratoryProfile />} />    {/* showed when the lab logged into his account */}
           <Route path="/callService" element={<HouseCallService />} />    {/* doesnt need regestration */}
@@ -68,7 +73,7 @@ function App() {
       <BrowserRouter>
 
         <Routes>
-
+          
         </Routes>
 
       </BrowserRouter>

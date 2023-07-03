@@ -15,6 +15,7 @@ const LaboratoryProfile = () => {
         labName: '',
         phoneNumber: '',
         location: '',
+        // email: '',
     });
     console.log(labInfoFormData)
 
@@ -39,6 +40,7 @@ const LaboratoryProfile = () => {
                 labName: '',
                 phoneNumber: '',
                 location: '',
+                // email: '',
             });
             setIsSubmitted(true); // Set isSubmitted to true after successful submission
         } catch (error) {
@@ -349,6 +351,20 @@ const LaboratoryProfile = () => {
                                                                 />
                                                             </div>
                                                         </div>
+                                                        {/* <div class="md:flex items-center lg:ml-24 mt-8">
+                                                            <div class="md:w-64">
+                                                                <label class="text-sm leading-none text-gray-800" id="emailAddress">Laboratory Email</label>
+                                                                <input
+                                                                    type="email"
+                                                                    name="location"
+                                                                    tabindex="0"
+                                                                    class="w-full p-3 mt-3 bg-gray-100 border rounded border-gray-200 focus:outline-none focus:border-gray-600 text-sm font-medium leading-none text-gray-800"
+                                                                    aria-labelledby="emailAddress"
+                                                                    value={labInfoFormData.laboratoryEmail}
+                                                                    onChange={handleLabInfoInputChange}
+                                                                />
+                                                            </div>
+                                                        </div> */}
                                                         <div class="md:flex items-center lg:ml-24 mt-10">
                                                             <div class="md:w-64">
                                                                 <button

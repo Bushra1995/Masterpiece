@@ -76,7 +76,7 @@ const Laboratories = () => {
                         </div> */}
 
 
-                        <div>
+                        <div className="row">
                             {/* Render the list of laboratories */}
                             {laboratories.map((laboratory) => (
                                 <div className="col-lg-4 col-md-6" key={laboratory._id}>
@@ -88,6 +88,9 @@ const Laboratories = () => {
                                             <h4>{laboratory.labName}</h4>
                                             <p>{laboratory.phoneNumber}</p>
                                             <p>{laboratory.location}</p>
+                                            {/* <Link to="LabPage" className="read-more text-decoration-none">
+                                                Go to the Lab <i className="lni lni-arrow-right" />
+                                            </Link> */}
                                             <Link to={`LabPage/${laboratory._id}`} className="read-more text-decoration-none">
                                                 Go to the Lab <i className="lni lni-arrow-right" />
                                             </Link>

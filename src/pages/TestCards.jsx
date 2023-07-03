@@ -20,16 +20,16 @@ const TestCards = () => {
     const handleAddToCheckout = (offer) => {
         const selectedTests = sessionStorage.getItem('selectedTests');
         let tests = selectedTests ? JSON.parse(selectedTests) : [];
-        
+
         // Check if the offer is already in the tests array
         const isTestAlreadyAdded = tests.some((test) => test._id === offer._id);
-        
+
         if (!isTestAlreadyAdded) {
-          tests = [...tests, offer];
-          sessionStorage.setItem('selectedTests', JSON.stringify(tests));
+            tests = [...tests, offer];
+            sessionStorage.setItem('selectedTests', JSON.stringify(tests));
         }
-      };
-      
+    };
+
 
     return (
         <>

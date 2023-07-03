@@ -9,6 +9,41 @@ const Checkout = () => {
         window.scrollTo(0, 0);
     }, []);
 
+    // Save payment data in session storage
+    const [formData, setFormData] = useState({
+        firstName: '',
+        middleName: '',
+        thirdName: '',
+        lastName: '',
+        gender: '',
+        ageGroup: '',
+        address: '',
+        phoneNumber: '',
+        cardHolderName: '',
+        cardNumber: '',
+        cvc: '',
+        expirationDate: ''
+    });
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        sessionStorage.setItem('formData', JSON.stringify(formData));
+    };
+    
+
+    useEffect(() => {
+        const storedFormData = sessionStorage.getItem('formData');
+        if (storedFormData) {
+            setFormData(JSON.parse(storedFormData));
+        }
+    }, []);
 
     const [dropdown1, setDropdown1] = useState(false);
     const [dropdown2, setDropdown2] = useState(false);
@@ -29,7 +64,15 @@ const Checkout = () => {
     return (
 
         <div className="overflow-y-hidden">
-            <div className="flex-col justify-center items-center 2xl:container 2xl:mx-auto lg:py-16 md:py-12 py-9 px-4 md:px-6 lg:px-20 xl:px-44 bg-gray-100 shadow mb-6 mt-6">
+            {/* ------ Render Summary Table Here ------ */}
+            <div className="w-3/4 mx-auto">
+                <SummaryTable />
+            </div>
+
+            <form
+                onSubmit={handleSubmit}
+                className="flex-col justify-center items-center 2xl:container 2xl:mx-auto lg:py-16 md:py-12 py-9 px-4 md:px-6 lg:px-20 xl:px-44 bg-gray-100 shadow mb-6 mt-6"
+            >
                 <div className="flex w-full sm:w-9/12 lg:w-full flex-col lg:flex-col justify-center items-center lg:space-x-10 2xl:space-x-20 space-y-12 lg:space-y-0">
                     <div className="flex w-full  flex-col justify-start items-start">
                         <div className="row">
@@ -46,17 +89,49 @@ const Checkout = () => {
                         </div>
                         <div className="mt-8 flex flex-col justify-start items-start w-full space-y-8">
                             <div className="flex justify-between flex-col sm:flex-row w-full items-start space-y-8 sm:space-y-0 sm:space-x-8">
-                                <input className="px-2 focus:outline-none focus:ring-2 focus:ring-gray-500 border-b border-gray-200 leading-4 text-base placeholder-gray-600 py-4 w-full" type="text" placeholder="First Name" />
-                                <input className="px-2 focus:outline-none focus:ring-2 focus:ring-gray-500 border-b border-gray-200 leading-4 text-base placeholder-gray-600 py-4 w-full" type="text" placeholder="Middle Name" />
-                                <input className="px-2 focus:outline-none focus:ring-2 focus:ring-gray-500 border-b border-gray-200 leading-4 text-base placeholder-gray-600 py-4 w-full" type="text" placeholder="Third Name" />
-                                <input className="px-2 focus:outline-none focus:ring-2 focus:ring-gray-500 border-b border-gray-200 leading-4 text-base placeholder-gray-600 py-4 w-full" type="text" placeholder="Last Name" />
+                                <input
+                                    value={formData.firstName}
+                                    onChange={handleChange}
+                                    className="px-2 focus:outline-none focus:ring-2 focus:ring-gray-500 border-b border-gray-200 leading-4 text-base placeholder-gray-600 py-4 w-full"
+                                    type="text"
+                                    name="firstName"
+                                    placeholder="First Name"
+                                />
+                                <input
+                                    value={formData.middleName}
+                                    onChange={handleChange}
+                                    className="px-2 focus:outline-none focus:ring-2 focus:ring-gray-500 border-b border-gray-200 leading-4 text-base placeholder-gray-600 py-4 w-full"
+                                    type="text"
+                                    name="middleName"
+                                    placeholder="Middle Name"
+                                />
+                                <input
+                                    value={formData.thirdName}
+                                    onChange={handleChange}
+                                    className="px-2 focus:outline-none focus:ring-2 focus:ring-gray-500 border-b border-gray-200 leading-4 text-base placeholder-gray-600 py-4 w-full"
+                                    type="text"
+                                    name="thirdName"
+                                    placeholder="Third Name"
+                                />
+                                <input
+                                    value={formData.lastName}
+                                    onChange={handleChange}
+                                    className="px-2 focus:outline-none focus:ring-2 focus:ring-gray-500 border-b border-gray-200 leading-4 text-base placeholder-gray-600 py-4 w-full"
+                                    type="text"
+                                    name="lastName"
+                                    placeholder="Last Name"
+                                />
                             </div>
                             <div className="flex justify-between flex-col sm:flex-row w-full items-start space-y-8 sm:space-y-0 sm:space-x-8">
                                 <div className="relative w-full">
                                     <p id="button1" className=" px-2 border-b border-gray-200 text-left leading-4 text-base text-gray-600 py-4 w-full">
                                         {changeText1}
                                     </p>
-                                    <button onClick={() => setDropdown1(!dropdown1)} className="focus:outline-none focus:ring-2 focus:ring-gray-500 rounded-full cursor-pointer absolute bottom-4 right-0">
+                                    <button
+                                        type="button"
+                                        onClick={() => setDropdown1(!dropdown1)} className="focus:outline-none focus:ring-2 focus:ring-gray-500 rounded-full cursor-pointer absolute bottom-4 right-0"
+                                    >
+                                        <span className="text-gray-800">{formData.gender}</span>
                                         <svg id="close" className={` transform ${dropdown1 ? "rotate-180" : ""}  `} width={16} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M12 6L8 10L4 6" stroke="#4B5563" strokeLinecap="round" strokeLinejoin="round" />
                                         </svg>
@@ -77,7 +152,11 @@ const Checkout = () => {
                                     <p id="button1" className=" px-2 border-b border-gray-200 text-left leading-4 text-base text-gray-600 py-4 w-full">
                                         {changeText2}
                                     </p>
-                                    <button onClick={() => setDropdown2(!dropdown2)} className="focus:outline-none focus:ring-2 focus:ring-gray-500 rounded-full cursor-pointer absolute bottom-4 right-0">
+                                    <button
+                                        onClick={() => setDropdown2(!dropdown2)} className="focus:outline-none focus:ring-2 focus:ring-gray-500 rounded-full cursor-pointer absolute bottom-4 right-0"
+                                        type="button"
+                                    >
+                                        <span className="text-gray-800">{formData.ageGroup}</span>
                                         <svg id="close" className={` transform ${dropdown2 ? "rotate-180" : ""}  `} width={16} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M12 6L8 10L4 6" stroke="#4B5563" strokeLinecap="round" strokeLinejoin="round" />
                                         </svg>
@@ -99,23 +178,60 @@ const Checkout = () => {
 
                             </div>
                             <div className="flex justify-between flex-col sm:flex-row w-full items-start space-y-8 sm:space-y-0 sm:space-x-8">
-                                <input className="px-2 focus:outline-none focus:ring-2 focus:ring-gray-500 border-b border-gray-200 leading-4 text-base placeholder-gray-600 py-4 w-full" type="text" placeholder="Address" />
-                                <input className="focus:outline-none focus:ring-2 focus:ring-gray-500 px-2 border-b border-gray-200 leading-4 text-base placeholder-gray-600 py-4   w-full" type="text" placeholder="Phone Number" />
+                                <input
+                                    value={formData.address}
+                                    onChange={handleChange}
+                                    className="px-2 focus:outline-none focus:ring-2 focus:ring-gray-500 border-b border-gray-200 leading-4 text-base placeholder-gray-600 py-4 w-full"
+                                    type="text"
+                                    name="address"
+                                    placeholder="Address"
+                                />
+                                <input
+                                    value={formData.phoneNumber}
+                                    onChange={handleChange}
+                                    className="focus:outline-none focus:ring-2 focus:ring-gray-500 px-2 border-b border-gray-200 leading-4 text-base placeholder-gray-600 py-4   w-full"
+                                    type="tel"
+                                    name="phoneNumber"
+                                    placeholder="Phone Number" />
                             </div>
                             <div className="flex justify-between flex-col sm:flex-row w-full items-start space-y-8 sm:space-y-0 sm:space-x-8">
                                 <div className="w-full">
-                                    <input className="focus:outline-none focus:ring-2 focus:ring-gray-500 px-2 border-b border-gray-200 leading-4 text-base placeholder-gray-600 pt-4 pb-3   w-full" type="text" placeholder="Card Holder Name" />
+                                    <input
+                                        value={formData.cardHolderName}
+                                        onChange={handleChange}
+                                        className="focus:outline-none focus:ring-2 focus:ring-gray-500 px-2 border-b border-gray-200 leading-4 text-base placeholder-gray-600 pt-4 pb-3   w-full"
+                                        type="text"
+                                        name="cardHolderName"
+                                        placeholder="Card Holder Name" />
                                 </div>
                                 <div className="w-full">
-                                    <input className="focus:outline-none focus:ring-2 focus:ring-gray-500 px-2 border-b border-gray-200 leading-4 text-base placeholder-gray-600 pt-4 pb-3   w-full" type="text" placeholder="Card Number" />
+                                    <input
+                                        value={formData.cardNumber}
+                                        onChange={handleChange}
+                                        className="focus:outline-none focus:ring-2 focus:ring-gray-500 px-2 border-b border-gray-200 leading-4 text-base placeholder-gray-600 pt-4 pb-3   w-full"
+                                        type="text"
+                                        name="cardNumber"
+                                        placeholder="Card Number" />
                                 </div>
                             </div>
                             <div className="flex justify-between flex-col sm:flex-row w-full items-start space-y-8 sm:space-y-0 sm:space-x-8">
                                 <div className="w-full">
-                                    <input className="focus:outline-none focus:ring-2 focus:ring-gray-500 px-2 border-b border-gray-200 leading-4 text-base placeholder-gray-600 pt-4 pb-3   w-full" type="text" placeholder="CVC" />
+                                    <input
+                                        value={formData.cvc}
+                                        onChange={handleChange}
+                                        className="focus:outline-none focus:ring-2 focus:ring-gray-500 px-2 border-b border-gray-200 leading-4 text-base placeholder-gray-600 pt-4 pb-3   w-full"
+                                        type="text"
+                                        name="cvc"
+                                        placeholder="CVC" />
                                 </div>
                                 <div className="w-full">
-                                    <input className="focus:outline-none focus:ring-2 focus:ring-gray-500 px-2 border-b border-gray-200 leading-4 text-base placeholder-gray-600 pt-4 pb-3   w-full" type="date" placeholder="" />
+                                    <input
+                                        value={formData.expirationDate}
+                                        onChange={handleChange}
+                                        className="focus:outline-none focus:ring-2 focus:ring-gray-500 px-2 border-b border-gray-200 leading-4 text-base placeholder-gray-600 pt-4 pb-3   w-full"
+                                        type="date"
+                                        name="expirationDate"
+                                        placeholder="" />
                                 </div>
                             </div>
                         </div>
@@ -123,17 +239,14 @@ const Checkout = () => {
                 </div>
                 <div className="flex justify-center w-full mt-4">
                     <button
+                        type="submit"
                         className="mt-2 font-medium leading-4 py-3 px-4 text-white text-center text-decoration-none rounded"
                         style={{ backgroundColor: '#3AA6B9' }}
                     >
                         Submit
                     </button>
                 </div>
-            </div>
-            {/* ------ Render Summary Table Here ------ */}
-            <div className="w-3/4 mx-auto">
-                <SummaryTable />
-            </div>
+            </form>
             <Link to="#" className="flex justify-center items-center text-decoration-none">
                 <button
                     className="mt-2 mb-4 font-medium leading-4 py-4 w-50 md:w-4/12 lg:w-50 text-white text-center text-decoration-none rounded"

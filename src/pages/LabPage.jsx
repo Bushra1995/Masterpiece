@@ -1,23 +1,71 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import svg1 from '../img/shapes/shape-1.svg';
 import svg3 from '../img/shapes/shape-3.svg';
 import { Link } from "react-router-dom";
 import axios from "axios";
 
 const LabPage = () => {
+    // To not scroll to the bottom when user comes from another page here
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
-    const [test, setTest] = useState([]);
+    // To scroll from about us button to the about us section
+    const programsRef = useRef(null);
+
+    const scrollToPrograms = () => {
+        if (programsRef.current) {
+            window.scrollTo({
+                top: programsRef.current.offsetTop,
+                behavior: 'smooth',
+            });
+        }
+    };
+
+
+    const [labName, setLabName] = useState('');
 
     useEffect(() => {
-        axios.get('http://localhost:4000/test')
+        // Fetch the lab name from the backend API
+        fetchLabName();
+    }, []);
+
+    const fetchLabName = async () => {
+        try {
+            const response = await fetch('http://localhost:4000/lab/laboratories');
+            const data = await response.json();
+
+            // Update the lab name in the state
+            setLabName(data.labName);
+        } catch (error) {
+            console.error('Error fetching lab name:', error);
+        }
+    };
+
+
+    const [tests, setTests] = useState([]);
+    useEffect(() => {
+        axios.get('http://localhost:4000/tests')
             .then(response => {
-                setTest(response.data);
+                setTests(response.data);
             })
             .catch(error => {
                 console.log(error);
             });
     }, []);
 
+    const handleAddToCheckout = (test) => {
+        const selectedTests = sessionStorage.getItem('selectedTests');
+        let addedTests = selectedTests ? JSON.parse(selectedTests) : [];
+
+        // Check if the test is already in the tests array
+        const isTestAlreadyAdded = addedTests.some((test) => test._id === test._id);
+
+        if (!isTestAlreadyAdded) {
+            addedTests = [...addedTests, test];
+            sessionStorage.setItem('selectedTests', JSON.stringify(addedTests));
+        }
+    };
 
     return (
         <>
@@ -39,7 +87,7 @@ const LabPage = () => {
                         <div>
                             <div className="text-color w-full md:w-1/3 pt-16 lg:pt-32 xl:pt-12">
                                 <h1 className="text-white text-decoration-none text-xl md:text-xl lg:text-4xl w-11/12 lg:w-11/12 xl:w-full xl:text-4xl text-gray-900 font-bold f-f-l">
-                                    Lab Name or Logo </h1>
+                                    {labName} </h1>
                                 <div className="f-f-r text-base lg:text-base pb-20 sm:pb-0 pt-10 xl:pt-6">
                                 </div>
                             </div>
@@ -59,13 +107,13 @@ const LabPage = () => {
                                 >
                                     Our Tests
                                 </a>
-                                <a
-                                    href="#"
+                                <button
+                                    onClick={scrollToPrograms}
                                     className="block w-full text-decoration-none rounded px-12 py-3 text-sm font-medium text-white shadow hover:text-rose-700 focus:outline-none focus:ring active:text-rose-500 sm:w-auto"
                                     style={{ backgroundColor: "#3AA6B9" }}
                                 >
                                     About Us
-                                </a>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -96,27 +144,31 @@ const LabPage = () => {
                         </div>
                     </div>
                     <div className="row">
-
-                        {/* <div className="col-lg-4 col-md-6">
-                            <div className="service-item mb-30">
-                                <div className="service-icon mb-25">
+                        {tests.map((test) => (
+                            <div className="col-lg-4 col-md-6" key={test._id}>
+                                <div className="service-item mb-30">
+                                    <div className="service-icon mb-25"></div>
+                                    <div className="service-content">
+                                        <h1>{test.labName}</h1>
+                                        <h4>{test.testName}</h4>
+                                        <p>{test.testDescription}</p>
+                                        <p>Sample Type : {test.sampleType}</p>
+                                        <p>Test Duration : {test.testTiming}</p>
+                                        <p>Test Requirements : {test.testConditions}</p>
+                                        <p>Test Price : {test.price}</p>
+                                        <Link
+                                            to="checkout"
+                                            className="read-more text-decoration-none"
+                                            onClick={() => handleAddToCheckout(test)}
+                                        >
+                                            Add To Checkout <i className="lni lni-arrow-right" />
+                                        </Link>
+                                    </div>
+                                    <div className="service-overlay img-bg" />
                                 </div>
-                                <div className="service-content">
-                                    <h4>Vitamin B 12</h4>
-                                    <p>
-                                        We operate diagnostic medical laboratories in 22 different
-                                        location branches throughout the country.
-                                    </p>
-                                    <Link to="#" className="read-more text-decoration-none">
-                                        More Details <i className="lni lni-arrow-right" />
-                                    </Link>
-                                </div>
-                                <div className="service-overlay img-bg" />
                             </div>
-                        </div> */}
-
-
-                        <div>
+                        ))}
+                        {/* <div>
                             {test.map(item => (
                                 <div className="col-lg-4 col-md-6" key={item.id}>
                                     <div className="service-item mb-30">
@@ -132,7 +184,7 @@ const LabPage = () => {
                                     </div>
                                 </div>
                             ))}
-                        </div>
+                        </div> */}
 
 
                     </div>
@@ -143,7 +195,10 @@ const LabPage = () => {
             {/* ------------------------------------------------------------ About Us ------------------------------------------------------------------------- */}
 
 
-            <div className="py-16 bg-white">
+            <div
+                ref={programsRef}
+                className="py-16 bg-white"
+            >
                 <div className="container m-auto px-6 text-gray-600 md:px-12 xl:px-6">
                     <div className="lg:bg-gray-50 dark:lg:bg-darker lg:p-16 rounded-[4rem] space-y-6 md:flex md:gap-6 justify-center md:space-y-0 lg:items-center" style={{ boxShadow: '8px 8px 10px rgba(0, 0, 255, 0.1)' }}>
                         <div className="md:5/12 lg:w-5/12">
